@@ -40,19 +40,32 @@ export const App: React.FC = () => {
   const [products] = useState<FullProduct[]>(fullProductsList);
   const [userToFilter, setUserToFilter] = useState<string>('');
   const [query, setQuery] = useState('');
+  const [categoriesToFilter, setCategoriesToFilter] = useState<string[]>([]);
 
-  const filtredProducts = products.filter(product => {
-    if (userToFilter === '') {
-      return product;
-    }
+  const filtredProducts = products
+    .filter(product => {
+      if (userToFilter === '') {
+        return product;
+      }
 
-    return product.user?.name === userToFilter;
-  })
+      return product.user?.name === userToFilter;
+    })
     .filter(product => {
       const lowerCasedName = product.name.toLowerCase();
       const lowerCasedQuery = query.toLowerCase();
 
       return lowerCasedName.includes(lowerCasedQuery);
+    })
+    .filter(product => {
+      if (categoriesToFilter.length === 0) {
+        return product;
+      }
+
+      if (product.category) {
+        return categoriesToFilter.includes(product.category.title);
+      }
+
+      return product;
     });
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,6 +77,7 @@ export const App: React.FC = () => {
   const resetFilters = () => {
     setUserToFilter('');
     clearInput();
+    setCategoriesToFilter([]);
   };
 
   return (
@@ -80,6 +94,8 @@ export const App: React.FC = () => {
           clearInput={clearInput}
           resetFilters={resetFilters}
           categories={categoriesFromServer}
+          setCategoriesToFilter={setCategoriesToFilter}
+          categoriesToFilter={categoriesToFilter}
         />
 
         <div className="box table-container">

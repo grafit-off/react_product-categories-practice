@@ -12,6 +12,8 @@ interface Props {
   clearInput: () => void;
   resetFilters: () => void;
   categories: Category[];
+  categoriesToFilter: string[];
+  setCategoriesToFilter: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export const FilterPanel: React.FC<Props> = ({
@@ -23,6 +25,8 @@ export const FilterPanel: React.FC<Props> = ({
   clearInput,
   resetFilters,
   categories,
+  categoriesToFilter,
+  setCategoriesToFilter,
 }) => {
   return (
     <div className="block">
@@ -96,7 +100,13 @@ export const FilterPanel: React.FC<Props> = ({
           <a
             href="#/"
             data-cy="AllCategories"
-            className="button is-success mr-6 is-outlined"
+            className={classNames('button is-success mr-6', {
+              'is-outlined': categoriesToFilter.length > 0,
+            })}
+            onClick={event => {
+              event.preventDefault();
+              setCategoriesToFilter([]);
+            }}
           >
             All
           </a>
@@ -104,9 +114,25 @@ export const FilterPanel: React.FC<Props> = ({
           {categories.map(category => (
             <a
               data-cy="Category"
-              className="button mr-2 my-1"
+              className={classNames('button mr-2 my-1', {
+                'is-info': categoriesToFilter.includes(category.title),
+              })}
               href="#/"
               key={category.id}
+              onClick={event => {
+                event.preventDefault();
+                setCategoriesToFilter(currCategories => {
+                  const { title } = category;
+
+                  if (currCategories.includes(title)) {
+                    return currCategories.filter(currCategory => (
+                      currCategory !== title
+                    ));
+                  }
+
+                  return [...currCategories, title];
+                });
+              }}
             >
               {category.title}
             </a>
