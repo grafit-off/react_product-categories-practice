@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import React from 'react';
+import { Category } from '../../types/Category';
 import { User } from '../../types/User';
 
 interface Props {
@@ -10,6 +11,7 @@ interface Props {
   query: string;
   clearInput: () => void;
   resetFilters: () => void;
+  categories: Category[];
 }
 
 export const FilterPanel: React.FC<Props> = ({
@@ -20,6 +22,7 @@ export const FilterPanel: React.FC<Props> = ({
   query,
   clearInput,
   resetFilters,
+  categories,
 }) => {
   return (
     <div className="block">
@@ -89,6 +92,7 @@ export const FilterPanel: React.FC<Props> = ({
         </div>
 
         <div className="panel-block is-flex-wrap-wrap">
+
           <a
             href="#/"
             data-cy="AllCategories"
@@ -97,36 +101,16 @@ export const FilterPanel: React.FC<Props> = ({
             All
           </a>
 
-          <a
-            data-cy="Category"
-            className="button mr-2 my-1 is-info"
-            href="#/"
-          >
-            Category 1
-          </a>
-
-          <a
-            data-cy="Category"
-            className="button mr-2 my-1"
-            href="#/"
-          >
-            Category 2
-          </a>
-
-          <a
-            data-cy="Category"
-            className="button mr-2 my-1 is-info"
-            href="#/"
-          >
-            Category 3
-          </a>
-          <a
-            data-cy="Category"
-            className="button mr-2 my-1"
-            href="#/"
-          >
-            Category 4
-          </a>
+          {categories.map(category => (
+            <a
+              data-cy="Category"
+              className="button mr-2 my-1"
+              href="#/"
+              key={category.id}
+            >
+              {category.title}
+            </a>
+          ))}
         </div>
 
         <div className="panel-block">

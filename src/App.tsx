@@ -79,6 +79,7 @@ export const App: React.FC = () => {
           query={query}
           clearInput={clearInput}
           resetFilters={resetFilters}
+          categories={categoriesFromServer}
         />
 
         <div className="box table-container">
